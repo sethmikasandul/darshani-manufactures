@@ -3,26 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>දර්ශනී Manufactures - Firebase System</title>
+    <title>දර්ශනී Manufactures - Pro System</title>
     <style>
-        /* CSS කොටස නැවත සම්පූර්ණයෙන් එක් කර ඇත */
+        /* නවීන අකුරු විලාස (Fonts) එකතු කිරීම */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Noto+Sans+Sinhala:wght@300;400;600&display=swap');
-        :root { --primary: #ff4757; --dark: #2f3542; --green: #2ed573; --bg-color: #f1f2f6; }
-        body { font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif; margin: 0; background-color: var(--bg-color); }
-        header { background: linear-gradient(135deg, rgba(47, 53, 66, 0.9), rgba(0, 0, 0, 0.8)), url('https://media.istockphoto.com/id/463329259/photo/traditional-chilli-sauce.jpg?s=2048x2048&w=is&k=20&c=PF39oOgypOUfwRZnwVTdifAKv8G5imnii_zyyPjQztU='); background-size: cover; padding: 50px 20px; color: white; text-align: center; }
-        .nav-bar { background: rgba(47, 53, 66, 0.95); padding: 15px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn { padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; transition: 0.3s; text-decoration: none; }
-        .btn-nav { background: white; color: var(--dark); margin: 0 5px; }
-        .btn-nav:hover { background: var(--primary); color: white; }
-        .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 30px; }
-        .card { background: white; margin: 15px; padding: 20px; border-radius: 15px; width: 250px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; }
-        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; overflow-y: auto; }
-        .modal-content { background: white; width: 90%; max-width: 700px; margin: 50px auto; padding: 30px; border-radius: 15px; position: relative; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #eee; padding: 12px; text-align: left; }
-        th { background: var(--dark); color: white; }
+
+        /* නවීන වර්ණ මාලාව (Color Palette) */
+        :root { 
+            --primary: #ff4757; 
+            --primary-hover: #ff6b81;
+            --dark: #2f3542; 
+            --green: #2ed573; 
+            --green-hover: #7bed9f;
+            --blue: #1e90ff; 
+            --yellow: #ffa502;
+            --bg-color: #f1f2f6;
+            --card-bg: #ffffff;
+        }
+
+        body { 
+            font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif; 
+            margin: 0; 
+            background-color: var(--bg-color); 
+            color: #333;
+        }
+        
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(241, 242, 246, 0.85), rgba(241, 242, 246, 0.85)), url('https://media.istockphoto.com/id/1326126183/photo/sardines-fry-is-a-traditional-kerala-fish-dish-served-for-lunch.jpg?s=2048x2048&w=is&k=20&c=Mv7dg4T6i9B0Ad713XkuO3GtaBvEikCwtjbzwRGP9JE=');
+            background-size: cover; background-position: center; z-index: -1;
+        }
+
+        header { 
+            background: linear-gradient(135deg, rgba(47, 53, 66, 0.9), rgba(0, 0, 0, 0.8)), url('https://media.istockphoto.com/id/463329259/photo/traditional-chilli-sauce.jpg?s=2048x2048&w=is&k=20&c=PF39oOgypOUfwRZnwVTdifAKv8G5imnii_zyyPjQztU='); 
+            background-size: cover; background-position: center; 
+            color: white; padding: 60px 20px; text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        header h1 { margin: 0 0 10px 0; font-size: 2.5em; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        header p { font-size: 1.1em; font-weight: 300; letter-spacing: 1px; opacity: 0.9; }
+
+        /* Glassmorphism Navbar - Updated for layout separation */
+        .nav-bar { 
+            background: rgba(47, 53, 66, 0.9); backdrop-filter: blur(10px); 
+            padding: 15px 30px; position: sticky; top: 0; z-index: 1000; 
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-group {
+            display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+        }
+
+        /* Modern Buttons */
+        .btn { 
+            padding: 10px 22px; border: none; border-radius: 25px; cursor: pointer; 
+            font-weight: 600; font-size: 0.95em; font-family: inherit; 
+            text-decoration: none; display: inline-block; transition: all 0.3s ease; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        
+        /* Unified Nav Button Style */
+        .btn-nav { 
+            background: #ffffff; color: var(--dark); border: 2px solid transparent;
+        }
+        .btn-nav:hover { 
+            background: var(--primary); color: white;
+        }
+        
+        .btn-buy { background: var(--primary); color: white; width: 100%; margin-top: 15px; border-radius: 8px; padding: 12px;}
+        .btn-buy:hover { background: var(--primary-hover); }
+
+        .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+        
+        /* Modern Cards */
+        .card { 
+            background: var(--card-bg); margin: 15px; padding: 20px; border-radius: 16px; 
+            width: 260px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); text-align: center; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); border: 1px solid rgba(0,0,0,0.03);
+        }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.12); }
+        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; }
+        .card h3 { margin: 10px 0; color: var(--dark); font-size: 1.2em; }
+        .card p { color: var(--primary); font-weight: 600; font-size: 1.3em; margin: 10px 0; }
+        .card input[type="number"] { width: 60px; padding: 8px; border: 1px solid #ced6e0; border-radius: 8px; text-align: center; font-weight: bold; font-size: 1em; }
+
+        /* Animated Modals */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 2000; overflow-y: auto; }
+        .modal-content { 
+            background: white; width: 90%; max-width: 850px; margin: 5% auto; padding: 35px; 
+            border-radius: 20px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            animation: slideIn 0.4s ease-out;
+        }
+        @keyframes slideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .close-btn { position: absolute; top: 20px; right: 25px; font-size: 28px; cursor: pointer; color: #a4b0be; transition: color 0.3s; }
+        .close-btn:hover { color: var(--primary); }
+
+        /* Modern Tables */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 20px; background: white; font-size: 14px; min-width: 600px; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        th, td { border-bottom: 1px solid #f1f2f6; padding: 15px; text-align: left; }
+        th { background: var(--dark); color: white; font-weight: 500; text-transform: uppercase; font-size: 0.9em; letter-spacing: 0.5px; }
+        tr:hover td { background-color: #f8f9fa; }
+
+        .cart-count { background: var(--primary); color: white; padding: 3px 9px; border-radius: 50%; font-size: 12px; position: relative; top: -2px; margin-left: 5px; box-shadow: 0 2px 5px rgba(255, 71, 87, 0.4); }
+        
+        /* Modern Inputs */
+        input[type="text"], input[type="date"], input[type="number"], textarea { 
+            width: 100%; padding: 12px 15px; margin: 8px 0 15px; border: 1px solid #ced6e0; 
+            border-radius: 8px; box-sizing: border-box; font-family: inherit; 
+            transition: border-color 0.3s, box-shadow 0.3s; font-size: 14px;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2); }
+        hr { border: 0; height: 1px; background: #dfe4ea; margin: 20px 0; }
     </style>
 </head>
 <body>
@@ -33,132 +128,310 @@
 </header>
 
 <div class="nav-bar">
-    <div>
-        <button class="btn btn-nav" onclick="toggleModal('cartModal')">Cart <span id="cart-counter" style="background:red; color:white; padding:2px 6px; border-radius:50%; font-size:12px;">0</span></button>
+    <div class="nav-group">
+        <button class="btn btn-nav" onclick="toggleModal('aboutModal')">About Us</button>
+        <a href="https://wa.me/94777838498" target="_blank" class="btn btn-nav">Contact Us</a>
+        <button class="btn btn-nav" onclick="toggleModal('cartModal')">Cart 🛒 <span id="cart-counter" class="cart-count">0</span></button>
     </div>
-    <div>
-        <button id="admin-login-btn" class="btn btn-nav" onclick="checkAdminLogin()">Admin</button>
+    
+    <div class="nav-group">
+        <button id="admin-login-btn" class="btn btn-nav" onclick="checkAdminLogin()">Admin Panel</button>
         <button id="admin-dashboard-btn" class="btn btn-nav" style="display:none;" onclick="toggleModal('adminModal')">Dashboard</button>
+        <button id="admin-logout-btn" class="btn btn-nav" style="display:none; background-color: var(--primary); color: white;" onclick="adminLogout()">Logout</button>
     </div>
 </div>
 
-<div class="container" id="shop-container">භාණ්ඩ පූරණය වෙමින් පවතී...</div>
+<div class="container" id="shop-container"></div>
 
-<div id="adminModal" class="modal">
-    <div class="modal-content">
-        <span onclick="toggleModal('adminModal')" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
-        <h2>ඇඩ්මින් පාලක පැනලය</h2>
-        <div style="background:#f1f2f6; padding:20px; border-radius:10px;">
-            <h4>නව භාණ්ඩයක් එක් කරන්න</h4>
-            <input type="text" id="itemName" placeholder="භාණ්ඩයේ නම">
-            <input type="number" id="itemPrice" placeholder="මිල (රු.)">
-            <input type="text" id="itemImg" placeholder="පින්තූර Link එක">
-            <button class="btn" style="background:var(--green); color:white; width:100%" onclick="addItem()">Add Item</button>
+<div id="aboutModal" class="modal">
+    <div class="modal-content" style="max-width: 450px;">
+        <span class="close-btn" onclick="toggleModal('aboutModal')">&times;</span>
+        <h2 style="color: var(--blue); margin-top:0;">අප පිළිබඳව</h2>
+        <div style="line-height: 1.8;">
+            <p><b>ආයතනය:</b> දර්ශනී Manufactures & Distributors</p>
+            <p><b>ලිපිනය:</b> 2/18 E, ප්‍රගතිපුර, පේරාදෙනිය.</p>
+            <p><b>දුරකථන:</b> 0777-838498</p>
+            <hr>
+            <p style="color: #555;">අප ආයතනය උසස් ප්‍රමිතියේ නිෂ්පාදන බෙදාහැරීමේ කටයුතු සිදුකරනු ලබයි.</p>
         </div>
-        <h3>ලැබී ඇති ඇණවුම්</h3>
-        <div style="overflow-x:auto;"><table id="orderTable"><thead><tr><th>නම</th><th>විස්තර</th><th>මුදල</th></tr></thead><tbody id="orderListBody"></tbody></table></div>
     </div>
 </div>
 
 <div id="cartModal" class="modal">
     <div class="modal-content">
-        <span onclick="toggleModal('cartModal')" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
-        <h2>මගේ කරත්තය</h2>
-        <div id="cart-list"></div>
+        <span class="close-btn" onclick="toggleModal('cartModal')">&times;</span>
+        <h2 style="color: var(--blue); margin-top:0;">මගේ කරත්තය</h2>
+        <div id="cart-items-list"></div>
+        <div style="text-align: right; font-size: 1.2em; font-weight: 600; margin: 15px 0;">මුළු එකතුව: රු. <span id="grand-total" style="color: var(--primary);">0.00</span></div>
+        <hr>
+        <h3 style="color: var(--dark);">බෙදාහැරීමේ තොරතුරු</h3>
         <input type="text" id="custName" placeholder="ඔබේ නම">
         <input type="text" id="custPhone" placeholder="WhatsApp අංකය">
-        <button class="btn" style="background:var(--green); color:white; width:100%" onclick="placeOrder()">ඇණවුම් කරන්න</button>
+        <label style="font-size: 14px; font-weight: 600; color: #555;">අවශ්‍ය අවසාන දිනය:</label>
+        <input type="date" id="deliveryDate">
+        <textarea id="deliveryAddress" placeholder="බෙදාහැරිය යුතු සම්පූර්ණ ලිපිනය" rows="3"></textarea>
+        
+        <button class="btn" style="background:var(--green); color:white; width:100%; padding:15px; margin-top:10px; font-size: 1.1em;" onclick="placeOrder()">ඇණවුම තහවුරු කරන්න</button>
+    </div>
+</div>
+
+<div id="adminModal" class="modal">
+    <div class="modal-content" style="max-width: 950px;">
+        <span class="close-btn" onclick="toggleModal('adminModal')">&times;</span>
+        <h2 style="color: var(--primary); margin-top:0;">ඇඩ්මින් පාලක පැනලය</h2>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;">
+            <button class="btn" style="background:#a4b0be; color:white; border-radius: 8px;" onclick="changePassword()">මුරපදය මාරු කරන්න</button>
+            <button class="btn" style="background:var(--primary); color:white; border-radius: 8px;" onclick="clearAllOrders()">සියලුම ඇණවුම් මකන්න</button>
+        </div>
+
+        <div id="admin-controls-section" style="background:var(--bg-color); padding:20px; border-radius:12px; margin-bottom:25px;">
+            <h4 style="margin-top:0;">නව භාණ්ඩයක් එක් කරන්න</h4>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: center;">
+                <input type="text" id="itemName" placeholder="නම" style="margin:0;">
+                <input type="number" id="itemPrice" placeholder="මිල" style="margin:0;">
+                <input type="text" id="itemImg" placeholder="පින්තූර Link" style="margin:0;">
+                <button class="btn" style="background:var(--green); color:white; border-radius: 8px; padding: 12px 20px;" onclick="addItem()">Add Item</button>
+            </div>
+        </div>
+
+        <h3>ලැබී ඇති ඇණවුම්</h3>
+        <div style="overflow-x:auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>පාරිභෝගිකයා</th>
+                        <th>අයිතම විස්තර</th>
+                        <th>අවශ්‍ය දිනය</th>
+                        <th>මුළු මුදල</th>
+                        <th>ක්‍රියාව</th>
+                    </tr>
+                </thead>
+                <tbody id="orderListBody"></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <script>
-    // පියවර 1: ඔබේ URL එක මෙතැනට දමන්න (අගට / සලකුණ එපා)
-    const FIREBASE_URL = https://dharshani-34034-default-rtdb.firebaseio.com
-:; 
+    // පියවර 1: ඔබේ Firebase Database URL එක මෙතැනට ඇතුළත් කරන්න
+     const FIREBASE_URL = "https://dharshani-34034-default-rtdb.firebaseio.com";
 
     let items = [];
     let cart = [];
     let isAdmin = false;
 
-    // Firebase එකෙන් දත්ත කියවීම
-    async function loadShop() {
+    // Firebase එකෙන් දත්ත කියවීම (Load Products)
+    async function loadFirebaseData() {
         try {
             const response = await fetch(`${FIREBASE_URL}/products.json`);
             const data = await response.json();
-            const container = document.getElementById('shop-container');
-            container.innerHTML = '';
-            
-            if (data) {
-                items = Object.keys(data).map(key => ({...data[key], firebaseKey: key}));
-                items.forEach((item, index) => {
-                    container.innerHTML += `
-                        <div class="card">
-                            <img src="${item.img || 'https://via.placeholder.com/150'}">
-                            <h3>${item.name}</h3>
-                            <p>රු. ${item.price}</p>
-                            <button class="btn" style="background:var(--primary); color:white; width:100%" onclick="addToCart(${index})">කරත්තයට</button>
-                            ${isAdmin ? `<button onclick="deleteItem('${item.firebaseKey}')" style="color:red; border:none; background:none; cursor:pointer; margin-top:10px;">මකන්න</button>` : ''}
-                        </div>`;
-                });
-            } else {
-                container.innerHTML = 'තවමත් භාණ්ඩ ඇතුළත් කර නැත.';
-            }
-        } catch (e) {
-            console.error(e);
+            items = data ? Object.keys(data).map(key => ({...data[key], firebaseId: key})) : [];
+            renderItems();
+        } catch (error) {
+            console.error("දත්ත කියවීමේ දෝෂයකි:", error);
         }
-    }
-
-    // Firebase එකට දත්ත ඇතුළත් කිරීම
-    async function addItem() {
-        const name = document.getElementById('itemName').value;
-        const price = document.getElementById('itemPrice').value;
-        const img = document.getElementById('itemImg').value;
-
-        if (name && price) {
-            const newItem = { name, price, img };
-            await fetch(`${FIREBASE_URL}/products.json`, {
-                method: 'POST',
-                body: JSON.stringify(newItem)
-            });
-            alert("සාර්ථකව ඇතුළත් කළා!");
-            document.getElementById('itemName').value = '';
-            document.getElementById('itemPrice').value = '';
-            document.getElementById('itemImg').value = '';
-            loadShop();
-        } else {
-            alert("කරුණාකර නම සහ මිල ඇතුළත් කරන්න.");
-        }
-    }
-
-    async function deleteItem(key) {
-        if(confirm("මෙය මැකීමට අවශ්‍යද?")) {
-            await fetch(`${FIREBASE_URL}/products/${key}.json`, { method: 'DELETE' });
-            loadShop();
-        }
-    }
-
-    function addToCart(index) {
-        cart.push(items[index]);
-        document.getElementById('cart-counter').innerText = cart.length;
-        alert("එක් කළා!");
     }
 
     function toggleModal(id) {
         const m = document.getElementById(id);
-        m.style.display = (m.style.display === "block") ? "none" : "block";
-    }
-
-    function checkAdminLogin() {
-        if (prompt("මුරපදය ඇතුළත් කරන්න:") === "1234") {
-            isAdmin = true;
-            document.getElementById('admin-login-btn').style.display = 'none';
-            document.getElementById('admin-dashboard-btn').style.display = 'inline-block';
-            loadShop();
-            toggleModal('adminModal');
+        if (m.style.display === "block") {
+            m.style.display = "none";
+        } else {
+            m.style.display = "block";
+            if(id === 'adminModal') {
+                renderOrders();
+            }
         }
     }
 
-    loadShop();
+    function renderItems() {
+        const container = document.getElementById('shop-container');
+        container.innerHTML = '';
+        if(items.length === 0) {
+            container.innerHTML = '<p style="font-size:1.2em; color:#777; margin-top:50px;">තවමත් භාණ්ඩ ඇතුළත් කර නොමැත.</p>';
+        }
+        items.forEach((item, index) => {
+            container.innerHTML += `
+                <div class="card">
+                    <img src="${item.img}" onerror="this.src='https://via.placeholder.com/150'">
+                    <h3>${item.name}</h3>
+                    <p>රු. ${item.price}</p>
+                    <input type="number" id="qty${index}" value="1" min="1">
+                    <button class="btn btn-buy" onclick="addToCart(${index})">කරත්තයට</button>
+                    ${isAdmin ? `<button onclick="deleteItem('${item.firebaseId}')" style="color:#ff4757; background:rgba(255, 71, 87, 0.1); border:none; border-radius: 5px; cursor:pointer; display:block; padding: 5px 10px; margin:10px auto 0; font-size:13px; font-weight:600; transition: 0.3s;">මකන්න</button>` : ''}
+                </div>`;
+        });
+    }
+
+    function addToCart(index) {
+        const qtyInput = document.getElementById('qty' + index);
+        const qty = parseInt(qtyInput.value);
+        const item = items[index];
+        const existing = cart.find(c => c.name === item.name);
+        if(existing) { 
+            existing.qty += qty; 
+            existing.subtotal = existing.qty * parseFloat(item.price); 
+        } else { 
+            cart.push({ name: item.name, price: item.price, qty: qty, subtotal: qty * parseFloat(item.price) }); 
+        }
+        updateCartUI();
+        alert(item.name + " කරත්තයට එක් කළා!");
+    }
+
+    function updateCartUI() {
+        document.getElementById('cart-counter').innerText = cart.length;
+        const list = document.getElementById('cart-items-list');
+        list.innerHTML = '';
+        let total = 0;
+        cart.forEach((c, index) => {
+            total += c.subtotal;
+            list.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #f1f2f6; border-radius: 8px; margin-bottom: 5px; background: #fafafa;">
+                <span style="font-weight:500;">${c.name} <span style="color:#777; font-size:0.9em;">(x${c.qty})</span></span>
+                <span style="font-weight:600;">රු. ${c.subtotal.toFixed(2)} <button onclick="removeFromCart(${index})" style="color:white; border:none; background:var(--primary); cursor:pointer; font-weight:bold; border-radius: 5px; margin-left:10px; padding: 4px 8px;">X</button></span>
+            </div>`;
+        });
+        document.getElementById('grand-total').innerText = total.toFixed(2);
+    }
+
+    function removeFromCart(index) { cart.splice(index, 1); updateCartUI(); }
+
+    async function placeOrder() {
+        const name = document.getElementById('custName').value;
+        const phone = document.getElementById('custPhone').value;
+        const date = document.getElementById('deliveryDate').value;
+        const address = document.getElementById('deliveryAddress').value;
+
+        if(name && phone && date && address && cart.length > 0) {
+            const total = cart.reduce((sum, i) => sum + i.subtotal, 0);
+            const order = { custName: name, custPhone: phone, deliveryDate: date, address: address, items: [...cart], grandTotal: total };
+            
+            // Firebase එකට Order එක යැවීම
+            await fetch(`${FIREBASE_URL}/orders.json`, {
+                method: 'POST',
+                body: JSON.stringify(order)
+            });
+            
+            let itemStr = cart.map(i => `${i.name}(x${i.qty})`).join(', ');
+            let msg = `*නව ඇණවුමක්!*\n\nනම: ${name}\nදුරකථන: ${phone}\nදිනය: ${date}\nලිපිනය: ${address}\n\nඅයිතම: ${itemStr}\nමුළු මුදල: රු.${total.toFixed(2)}`;
+            
+            window.open(`https://wa.me/94777838498?text=${encodeURIComponent(msg)}`, '_blank');
+            
+            cart = []; 
+            updateCartUI(); 
+            toggleModal('cartModal');
+            alert("ඔබේ ඇණවුම සාර්ථකව යොමු කළා!");
+        } else { 
+            alert("කරුණාකර සියලු විස්තර සම්පූර්ණ කර කරත්තයට භාණ්ඩ එක් කරන්න."); 
+        }
+    }
+
+    async function checkAdminLogin() {
+        const storedPassResponse = await fetch(`${FIREBASE_URL}/admin/password.json`);
+        let storedPass = await storedPassResponse.json();
+        if(!storedPass) storedPass = "1234";
+
+        const pass = prompt("මුරපදය (Password) ඇතුළත් කරන්න:");
+        if(pass === storedPass) {
+            isAdmin = true;
+            document.getElementById('admin-login-btn').style.display = 'none';
+            document.getElementById('admin-dashboard-btn').style.display = 'inline-block';
+            document.getElementById('admin-logout-btn').style.display = 'inline-block';
+            loadFirebaseData();
+            toggleModal('adminModal');
+        } else if(pass !== null) { 
+            alert("මුරපදය වැරදියි!"); 
+        }
+    }
+
+    async function changePassword() {
+        const newPass = prompt("නව මුරපදය ඇතුළත් කරන්න:");
+        if(newPass && newPass.trim() !== "") {
+            await fetch(`${FIREBASE_URL}/admin/password.json`, { method: 'PUT', body: JSON.stringify(newPass) });
+            alert("මුරපදය සාර්ථකව වෙනස් කළා!");
+        }
+    }
+
+    async function clearAllOrders() {
+        if(confirm("සියලුම ඇණවුම් දත්ත පද්ධතියෙන් මකා දැමීමට ඔබට විශ්වාසද?")) {
+            await fetch(`${FIREBASE_URL}/orders.json`, { method: 'DELETE' });
+            renderOrders();
+            alert("සියලුම ඇණවුම් මකා දැමුවා.");
+        }
+    }
+
+    function adminLogout() {
+        isAdmin = false;
+        document.getElementById('admin-login-btn').style.display = 'inline-block';
+        document.getElementById('admin-dashboard-btn').style.display = 'none';
+        document.getElementById('admin-logout-btn').style.display = 'none';
+        renderItems();
+        alert("Logout සාර්ථකයි!");
+    }
+
+    async function addItem() {
+        const name = document.getElementById('itemName').value;
+        const price = document.getElementById('itemPrice').value;
+        const img = document.getElementById('itemImg').value || 'https://via.placeholder.com/150';
+        
+        if(name && price) {
+            await fetch(`${FIREBASE_URL}/products.json`, {
+                method: 'POST',
+                body: JSON.stringify({name, price, img})
+            });
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemPrice').value = '';
+            document.getElementById('itemImg').value = '';
+            loadFirebaseData();
+            alert("භාණ්ඩය සාර්ථකව එක් කළා!");
+        } else {
+            alert("නම සහ මිල ඇතුළත් කරන්න.");
+        }
+    }
+
+    async function deleteItem(id) {
+        if(confirm("මෙම භාණ්ඩය පද්ධතියෙන් මකන්නද?")) { 
+            await fetch(`${FIREBASE_URL}/products/${id}.json`, { method: 'DELETE' });
+            loadFirebaseData(); 
+        }
+    }
+
+    async function renderOrders() {
+        const tbody = document.getElementById('orderListBody');
+        if(!tbody) return;
+
+        const response = await fetch(`${FIREBASE_URL}/orders.json`);
+        const data = await response.json();
+        const currentOrders = data ? Object.keys(data).map(key => ({...data[key], firebaseId: key})) : [];
+        
+        tbody.innerHTML = '';
+        if(currentOrders.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:30px; color:#777;">තවමත් ඇණවුම් කිසිවක් ලැබී නැත.</td></tr>';
+            return;
+        }
+
+        currentOrders.forEach((o) => {
+            let itemDetails = o.items.map(i => `<span style="display:inline-block; background:#f1f2f6; padding:2px 6px; border-radius:4px; margin:2px;">${i.name} (x${i.qty})</span>`).join('');
+            tbody.innerHTML += `<tr>
+                <td><b style="color:var(--dark); font-size:1.05em;">${o.custName}</b><br><span style="color:var(--blue);">${o.custPhone}</span><br><small style="color:#777;">${o.address}</small></td>
+                <td>${itemDetails}</td>
+                <td style="color:var(--dark); font-weight:500;">${o.deliveryDate}</td>
+                <td style="font-weight:600; color:var(--primary); font-size:1.1em;">රු. ${parseFloat(o.grandTotal).toFixed(2)}</td>
+                <td><button onclick="deleteOrder('${o.firebaseId}')" style="background:var(--primary); color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.3s;">මකන්න</button></td>
+            </tr>`;
+        });
+    }
+
+    async function deleteOrder(id) {
+        if(confirm("මෙම ඇණවුම මකා දමන්නද?")) {
+            await fetch(`${FIREBASE_URL}/orders/${id}.json`, { method: 'DELETE' });
+            renderOrders();
+        }
+    }
+
+    // ආරම්භයේදී දත්ත පූරණය කිරීම
+    loadFirebaseData();
 </script>
+
 </body>
 </html>
