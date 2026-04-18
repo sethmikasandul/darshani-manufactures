@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>දර්ශනී Manufactures - Pro System (Firebase)</title>
+    <style>
+        /* [පෙර තිබූ CSS එලෙසම පවතී] */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Noto+Sans+Sinhala:wght@300;400;600&display=swap');
+        :root { --primary: #ff4757; --primary-hover: #ff6b81; --dark: #2f3542; --green: #2ed573; --blue: #1e90ff; --yellow: #ffa502; --bg-color: #f1f2f6; --card-bg: #ffffff; }
+        body { font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif; margin: 0; background-color: var(--bg-color); color: #333; }
+        header { background: linear-gradient(135deg, rgba(47, 53, 66, 0.9), rgba(0, 0, 0, 0.8)), url('https://media.istockphoto.com/id/463329259/photo/traditional-chilli-sauce.jpg?s=2048x2048&w=is&k=20&c=PF39oOgypOUfwRZnwVTdifAKv8G5imnii_zyyPjQztU='); background-size: cover; background-position: center; color: white; padding: 60px 20px; text-align: center; }
+        .nav-bar { background: rgba(47, 53, 66, 0.9); backdrop-filter: blur(10px); padding: 15px 30px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .nav-group { display: flex; gap: 12px; }
+        .btn { padding: 10px 22px; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; text-decoration: none; transition: 0.3s; }
+        .btn-nav { background: white; color: var(--dark); }
+        .btn-nav:hover { background: var(--primary); color: white; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: white; margin: 15px; padding: 20px; border-radius: 16px; width: 260px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); text-align: center; }
+        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 2000; overflow-y: auto; }
+        .modal-content { background: white; width: 90%; max-width: 850px; margin: 5% auto; padding: 35px; border-radius: 20px; position: relative; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border-bottom: 1px solid #eee; padding: 15px; text-align: left; }
+        th { background: var(--dark); color: white; }
+        .cart-count { background: var(--primary); color: white; padding: 2px 8px; border-radius: 50%; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>දර්ශනී Manufactures & Distributors</h1>
+    <p>පාරිභෝගික විශ්වාසය දිනූ විශිෂ්ටතම සේවාව</p>
+</header>
+
+<div class="nav-bar">
+    <div class="nav-group">
+        <button class="btn btn-nav" onclick="toggleModal('aboutModal')">About Us</button>
+        <a href="https://wa.me/94777838498" target="_blank" class="btn btn-nav">Contact Us</a>
+        <button class="btn btn-nav" onclick="toggleModal('cartModal')">Cart <span id="cart-counter" class="cart-count">0</span></button>
+    </div>
+    <div class="nav-group">
+        <button id="admin-login-btn" class="btn btn-nav" onclick="checkAdminLogin()">Admin Panel</button>
+        <button id="admin-dashboard-btn" class="btn btn-nav" style="display:none;" onclick="toggleModal('adminModal')">Dashboard</button>
+        <button id="admin-logout-btn" class="btn btn-nav" style="display:none; background: var(--primary); color:white;" onclick="adminLogout()">Logout</button>
+    </div>
+</div>
+
+<div class="container" id="shop-container">පූරණය වෙමින්...</div>
+
+<div id="aboutModal" class="modal">
+    <div class="modal-content" style="max-width: 450px;">
+        <span onclick="toggleModal('aboutModal')" style="float:right; cursor:pointer;">&times;</span>
+        <h2>අප පිළිබඳව</h2>
+        <p><b>ආයතනය:</b> දර්ශනී Manufactures & Distributors</p>
+        <p>2/18 E, ප්‍රගතිපුර, පේරාදෙනිය.</p>
+    </div>
+</div>
+
+<div id="cartModal" class="modal">
+    <div class="modal-content">
+        <span onclick="toggleModal('cartModal')" style="float:right; cursor:pointer;">&times;</span>
+        <h2>මගේ කරත්තය</h2>
+        <div id="cart-items-list"></div>
+        <h3>මුළු එකතුව: රු. <span id="grand-total">0.00</span></h3>
+        <input type="text" id="custName" placeholder="නම">
+        <input type="text" id="custPhone" placeholder="WhatsApp අංකය">
+        <input type="date" id="deliveryDate">
+        <textarea id="deliveryAddress" placeholder="ලිපිනය"></textarea>
+        <button class="btn" style="background:var(--green); color:white; width:100%" onclick="placeOrder()">Order Now</button>
+    </div>
+</div>
+
+<div id="adminModal" class="modal">
+    <div class="modal-content" style="max-width: 900px;">
+        <span onclick="toggleModal('adminModal')" style="float:right; cursor:pointer;">&times;</span>
+        <h2>ඇඩ්මින් පාලක පැනලය</h2>
+        <div style="background:#f9f9f9; padding:20px; border-radius:10px;">
+            <h4>නව භාණ්ඩයක් එක් කරන්න</h4>
+            <input type="text" id="itemName" placeholder="නම">
+            <input type="number" id="itemPrice" placeholder="මිල">
+            <input type="text" id="itemImg" placeholder="Image Link">
+            <button class="btn" style="background:var(--green); color:white" onclick="addItem()">Add Item</button>
+        </div>
+        <h3>ඇණවුම් ලැයිස්තුව</h3>
+        <div style="overflow-x:auto;">
+            <table>
+                <thead><tr><th>පාරිභෝගිකයා</th><th>භාණ්ඩ</th><th>මුදල</th><th>ක්‍රියාව</th></tr></thead>
+                <tbody id="orderListBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // පියවර 3: මෙහි ඔබේ Firebase URL එක ඇතුළත් කරන්න
+    const FIREBASE_URL = "ඔබේ_FIREBASE_DATABASE_URL_එක_මෙහි_පේස්ට්_කරන්න"; 
+
+    let items = [];
+    let cart = [];
+    let isAdmin = false;
+
+    async function fetchData(path) {
+        const response = await fetch(`${FIREBASE_URL}/${path}.json`);
+        return await response.json();
+    }
+
+    async function saveData(path, data) {
+        await fetch(`${FIREBASE_URL}/${path}.json`, {
+            method: 'PUT',
+            body: JSON.stringify(data)
+        });
+    }
+
+    async function loadShop() {
+        const data = await fetchData('products');
+        items = data ? Object.values(data) : [];
+        renderItems();
+    }
+
+    function renderItems() {
+        const container = document.getElementById('shop-container');
+        container.innerHTML = '';
+        items.forEach((item, index) => {
+            container.innerHTML += `
+                <div class="card">
+                    <img src="${item.img || 'https://via.placeholder.com/150'}">
+                    <h3>${item.name}</h3>
+                    <p>රු. ${item.price}</p>
+                    <input type="number" id="qty${index}" value="1" min="1" style="width:50px">
+                    <button class="btn" style="background:var(--primary); color:white; width:100%; margin-top:10px" onclick="addToCart(${index})">Add to Cart</button>
+                    ${isAdmin ? `<button onclick="deleteProduct('${index}')" style="margin-top:5px; border:none; color:red; background:none; cursor:pointer">Delete</button>` : ''}
+                </div>`;
+        });
+    }
+
+    async function addItem() {
+        const name = document.getElementById('itemName').value;
+        const price = document.getElementById('itemPrice').value;
+        const img = document.getElementById('itemImg').value;
+        if(name && price) {
+            const id = Date.now();
+            await fetch(`${FIREBASE_URL}/products/${id}.json`, {
+                method: 'PUT',
+                body: JSON.stringify({id, name, price, img})
+            });
+            alert("සාර්ථකයි!");
+            loadShop();
+        }
+    }
+
+    function addToCart(index) {
+        const qty = parseInt(document.getElementById('qty'+index).value);
+        const item = items[index];
+        cart.push({name: item.name, price: item.price, qty: qty, subtotal: qty * item.price});
+        document.getElementById('cart-counter').innerText = cart.length;
+        alert("කරත්තයට එක් කළා!");
+    }
+
+    async function placeOrder() {
+        const order = {
+            custName: document.getElementById('custName').value,
+            custPhone: document.getElementById('custPhone').value,
+            items: cart,
+            total: cart.reduce((s, i) => s + i.subtotal, 0)
+        };
+        const id = Date.now();
+        await fetch(`${FIREBASE_URL}/orders/${id}.json`, { method: 'PUT', body: JSON.stringify(order) });
+        
+        // WhatsApp Message
+        window.open(`https://wa.me/94777838498?text=New Order: ${order.custName}`, '_blank');
+        alert("Order Placed!");
+        cart = [];
+        toggleModal('cartModal');
+    }
+
+    function toggleModal(id) {
+        const m = document.getElementById(id);
+        m.style.display = (m.style.display === "block") ? "none" : "block";
+        if(id === 'adminModal') renderOrders();
+    }
+
+    async function renderOrders() {
+        const data = await fetchData('orders');
+        const tbody = document.getElementById('orderListBody');
+        tbody.innerHTML = '';
+        if(data) {
+            Object.keys(data).forEach(key => {
+                const o = data[key];
+                tbody.innerHTML += `<tr><td>${o.custName}</td><td>${o.items.length} items</td><td>${o.total}</td><td>Done</td></tr>`;
+            });
+        }
+    }
+
+    function checkAdminLogin() {
+        if(prompt("Password:") === "1234") {
+            isAdmin = true;
+            document.getElementById('admin-login-btn').style.display = 'none';
+            document.getElementById('admin-dashboard-btn').style.display = 'inline-block';
+            document.getElementById('admin-logout-btn').style.display = 'inline-block';
+            loadShop();
+            toggleModal('adminModal');
+        }
+    }
+
+    function adminLogout() { location.reload(); }
+
+    loadShop();
+</script>
+</body>
+</html>
